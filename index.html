@@ -8,13 +8,12 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #1a1a1a; /* Fundo mais escuro para destaque */
+            background-color: #1a1a1a; /* Fundo escuro */
         }
 
         img {
             position: absolute;
             width: 100px; /* Tamanho da caveira */
-            transition: transform 0.1s linear; /* Para um efeito visual mais suave */
         }
     </style>
 </head>
@@ -28,49 +27,31 @@
         let y = 10;
         let dx = 3; // Velocidade e direção horizontal
         let dy = 3; // Velocidade e direção vertical
-        const speed = 3;
-
-        // Posição inicial
+        
         img.style.left = x + 'px';
         img.style.top = y + 'px';
 
-        // Função para atualizar posição
+        // Função principal do loop de animação
         function atualizarPosicao() {
+            // Calcula os limites da tela
             const maxX = window.innerWidth - img.width;
             const maxY = window.innerHeight - img.height;
 
-            // Atualiza a posição
+            // 1. Atualiza a posição
             x += dx;
             y += dy;
 
-            // Lógica de "ping-pong" para as bordas horizontais
+            // 2. Lógica de "ping-pong" (colisão com as bordas)
             if (x > maxX || x < 0) {
                 dx *= -1; // Inverte a direção horizontal
-                // Garante que a imagem esteja dentro dos limites para evitar travamento
-                x = Math.max(0, Math.min(x, maxX));
+                x = Math.max(0, Math.min(x, maxX)); // Garante que não saia do limite
             }
 
-            // Lógica de "ping-pong" para as bordas verticais
             if (y > maxY || y < 0) {
                 dy *= -1; // Inverte a direção vertical
-                // Garante que a imagem esteja dentro dos limites
-                y = Math.max(0, Math.min(y, maxY));
+                y = Math.max(0, Math.min(y, maxY)); // Garante que não saia do limite
             }
 
-            // Aplica a posição
+            // 3. Aplica a nova posição
             img.style.left = x + 'px';
-            img.style.top = y + 'px';
-
-            requestAnimationFrame(atualizarPosicao); // Chama a função novamente no próximo quadro
-        }
-
-        // Adiciona um listener para quando a janela for redimensionada, garantindo que o maxX e maxY sejam atualizados
-        window.addEventListener('resize', () => {
-             // Chamada opcional para ajustar imediatamente a posição se a imagem estiver fora
-             // Mas o loop já trata disso na próxima iteração
-        });
-
-        atualizarPosicao(); // Inicia o loop de movimento
-    </script>
-</body>
-</html>
+            img.style.top = y +
