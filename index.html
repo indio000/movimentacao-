@@ -1,83 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movimento da Caveira</title>
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background-color: #f0f0f0;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimento Automático da Caveira</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #1a1a1a; /* Fundo mais escuro para destaque */
+        }
 
-  img {
-    position: absolute;
-    top: 100px;
-    left: 100px;
-    width: 100px; /* tamanho da caveira */
-  }
-</style>
+        img {
+            position: absolute;
+            width: 100px; /* Tamanho da caveira */
+            transition: transform 0.1s linear; /* Para um efeito visual mais suave */
+        }
+    </style>
 </head>
 <body>
+    <img id="player" src="https://www.freeiconspng.com/uploads/skull-png-transparent-background-8.png" alt="Caveira">
 
-<!-- Imagem da caveira -->
-<img id="player" src="https://www.freeiconspng.com/uploads/skull-png-transparent-background-8.png" alt="Caveira">
+    <script>
+        const img = document.getElementById('player');
+        
+        let x = 10;
+        let y = 10;
+        let dx = 3; // Velocidade e direção horizontal
+        let dy = 3; // Velocidade e direção vertical
+        const speed = 3;
 
-<script>
-  const img = document.getElementById('player');
-  let x = 100;
-  let y = 100;
-  const speed = 5;
+        // Posição inicial
+        img.style.left = x + 'px';
+        img.style.top = y + 'px';
 
-  // Armazena quais teclas estão pressionadas
-  const keys = {
-    ArrowUp: false,
-    ArrowDown: false,
-    ArrowLeft: false,
-    ArrowRight: false,
-    w: false,
-    a: false,
-    s: false,
-    d: false,
-  };
+        // Função para atualizar posição
+        function atualizarPosicao() {
+            const maxX = window.innerWidth - img.width;
+            const maxY = window.innerHeight - img.height;
 
-  // Detecta tecla pressionada
-  document.addEventListener('keydown', (e) => {
-    if (keys.hasOwnProperty(e.key)) {
-      keys[e.key] = true;
-    }
-  });
+            // Atualiza a posição
+            x += dx;
+            y += dy;
 
-  // Detecta tecla solta
-  document.addEventListener('keyup', (e) => {
-    if (keys.hasOwnProperty(e.key)) {
-      keys[e.key] = false;
-    }
-  });
+            // Lógica de "ping-pong" para as bordas horizontais
+            if (x > maxX || x < 0) {
+                dx *= -1; // Inverte a direção horizontal
+                // Garante que a imagem esteja dentro dos limites para evitar travamento
+                x = Math.max(0, Math.min(x, maxX));
+            }
 
-  // Função para atualizar posição
-  function atualizarPosicao() {
-    if (keys.ArrowUp || keys.w) y -= speed;
-    if (keys.ArrowDown || keys.s) y += speed;
-    if (keys.ArrowLeft || keys.a) x -= speed;
-    if (keys.ArrowRight || keys.d) x += speed;
+            // Lógica de "ping-pong" para as bordas verticais
+            if (y > maxY || y < 0) {
+                dy *= -1; // Inverte a direção vertical
+                // Garante que a imagem esteja dentro dos limites
+                y = Math.max(0, Math.min(y, maxY));
+            }
 
-    // Impede a imagem de sair da tela
-    const maxX = window.innerWidth - img.width;
-    const maxY = window.innerHeight - img.height;
-    x = Math.max(0, Math.min(x, maxX));
-    y = Math.max(0, Math.min(y, maxY));
+            // Aplica a posição
+            img.style.left = x + 'px';
+            img.style.top = y + 'px';
 
-    // Aplica a posição
-    img.style.left = x + 'px';
-    img.style.top = y + 'px';
+            requestAnimationFrame(atualizarPosicao); // Chama a função novamente no próximo quadro
+        }
 
-    requestAnimationFrame(atualizarPosicao); // chama a função novamente
-  }
+        // Adiciona um listener para quando a janela for redimensionada, garantindo que o maxX e maxY sejam atualizados
+        window.addEventListener('resize', () => {
+             // Chamada opcional para ajustar imediatamente a posição se a imagem estiver fora
+             // Mas o loop já trata disso na próxima iteração
+        });
 
-  atualizarPosicao(); // inicia o loop
-</script>
-
+        atualizarPosicao(); // Inicia o loop de movimento
+    </script>
 </body>
 </html>
