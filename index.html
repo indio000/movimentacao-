@@ -7,16 +7,15 @@
 <style>
   body {
     margin: 0;
-    overflow: hidden; /* impede a rolagem da página */
+    overflow: hidden; /* impede rolagem da página */
     background-color: #f0f0f0;
   }
 
   img {
-    position: absolute; /* necessário para podermos mover */
+    position: absolute; /* necessário para mover */
     top: 100px;
     left: 100px;
     width: 100px;
-    transition: transform 0.05s linear; /* movimento mais suave */
   }
 </style>
 </head>
@@ -26,34 +25,52 @@
 
 <script>
   const img = document.getElementById('player');
-  let x = 100;
-  let y = 100;
-  const speed = 10; // pixels por movimento
+  let x = 100; // posição horizontal inicial
+  let y = 100; // posição vertical inicial
+  const speed = 10; // velocidade em pixels
 
-  // Detecta teclas pressionadas
+  // Atualiza a posição na tela
+  function atualizarPosicao() {
+    img.style.left = x + 'px';
+    img.style.top = y + 'px';
+  }
+
+  // Detecta quando uma tecla é pressionada
   document.addEventListener('keydown', (e) => {
     switch (e.key) {
       case 'ArrowUp':
       case 'w':
+      case 'W':
         y -= speed;
         break;
       case 'ArrowDown':
       case 's':
+      case 'S':
         y += speed;
         break;
       case 'ArrowLeft':
       case 'a':
+      case 'A':
         x -= speed;
         break;
       case 'ArrowRight':
       case 'd':
+      case 'D':
         x += speed;
         break;
     }
 
-    // Atualiza a posição da imagem
-    img.style.transform = `translate(${x}px, ${y}px)`;
+    // Impede a imagem de sair da tela
+    const maxX = window.innerWidth - img.width;
+    const maxY = window.innerHeight - img.height;
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
+
+    atualizarPosicao();
   });
+
+  // Define posição inicial
+  atualizarPosicao();
 </script>
 
 </body>
