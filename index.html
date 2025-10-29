@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movimento da Imagem</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden; /* impede a rolagem da página */
+    background-color: #f0f0f0;
+  }
+
+  img {
+    position: absolute; /* necessário para podermos mover */
+    top: 100px;
+    left: 100px;
+    width: 100px;
+    transition: transform 0.05s linear; /* movimento mais suave */
+  }
+</style>
+</head>
+<body>
+
+<img id="player" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="Imagem">
+
+<script>
+  const img = document.getElementById('player');
+  let x = 100;
+  let y = 100;
+  const speed = 10; // pixels por movimento
+
+  // Detecta teclas pressionadas
+  document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+      case 'ArrowUp':
+      case 'w':
+        y -= speed;
+        break;
+      case 'ArrowDown':
+      case 's':
+        y += speed;
+        break;
+      case 'ArrowLeft':
+      case 'a':
+        x -= speed;
+        break;
+      case 'ArrowRight':
+      case 'd':
+        x += speed;
+        break;
+    }
+
+    // Atualiza a posição da imagem
+    img.style.transform = `translate(${x}px, ${y}px)`;
+  });
+</script>
+
+</body>
+</html>
